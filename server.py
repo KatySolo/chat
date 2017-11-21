@@ -3,6 +3,7 @@
 
 import socket
 import sys
+import configparser
 import select
 import argparse
 
@@ -40,6 +41,46 @@ from PyQt5.QtWidgets import QPushButton, QWidget, QMainWindow, QAction, QApplica
 # десериализация - загрузка состояние
 # pickle
 # dump, load
+# def create_config(path):
+#     config = configparser.ConfigParser()
+#     config.add_section("SERVER")
+#     config.set("SERVER", "Localhost", "localhost")
+#     config.set("SERVER", "Port", "9600")
+#
+#     with open(path, "w") as config_file:
+#         config.write(config_file)
+#
+#
+# def get_config(path):
+#     config = configparser.ConfigParser()
+#     config.read(path)
+#     return config
+#
+#
+# def get_setting(path, section, setting):
+#     config = get_config(path)
+#     value = config.get(section, setting)
+#     return value
+#
+# path = "settings.ini"
+# create_config(path)
+# localhost = get_setting(path, 'SERVER', 'Localhost')
+# port = int(get_setting(path, 'SERVER', 'Port'))
+#
+# sock = socket.socket()
+# sock.bind((localhost, port))
+# sock.listen(1)
+# conn, adr = sock.accept()
+#
+# print 'connected:', adr
+#
+# while True:
+#     data = conn.recv(1024)
+#     if not data:
+#         break
+#     conn.send(data)
+#
+# conn.close()
 
 
 def send_message(host, port, message=' '):
@@ -60,13 +101,6 @@ def send_message(host, port, message=' '):
 # print(args)
 # send_message(args.host, args.port, args.message)
 
-def main():
-    app = QApplication(sys.argv)
-    win = ChatWindow()
-    win.show()
-    sys.exit(app.exec_())
-
-
 class ChatWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -76,7 +110,7 @@ class ChatWindow(QMainWindow):
         exit_action = QAction('Exit', self)
         exit_action.triggered.connect(self.close)
         self.resize(600, 600)
-        self.setWindowTitle('Chatik')
+        self.setWindowTitle('Chat')
         _win = Window()
         self.setCentralWidget(_win)
 
@@ -119,7 +153,6 @@ class Window(QWidget):
 
         self.setLayout(_layout)
 
-
     def send_message(self):
         text = self._input.text()
         if not text:
@@ -128,8 +161,6 @@ class Window(QWidget):
         self._input.setText('')
         self._input.setFocus()
 
-
-
     def _switch_enable_button(self):
         if self._input.text():
             self._button.setEnabled(True)
@@ -137,4 +168,7 @@ class Window(QWidget):
             self._button.setEnabled(False)
 
 if __name__ == '__main__':
-    main()
+    app = QApplication(sys.argv)
+    win = ChatWindow()
+    win.show()
+    sys.exit(app.exec_())
