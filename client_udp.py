@@ -14,6 +14,7 @@ if not data :
     sys.exit(1)
 
 #encode - перекодирует введенные данные в байты, decode - обратно
+
 data = str.encode(data)
 udp_socket.sendto(data, addr)
 data = bytes.decode(data)
